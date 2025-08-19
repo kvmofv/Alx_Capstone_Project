@@ -7,3 +7,9 @@ Week 2:
 - Done Setting up essential files like: (.gitignore), (reuirements.txt.).
 - Created a new branch specialized for starting core apps.
 - Created core structure apps.
+
+Week 3:
+- Created all apps' models and relations.
+- Created a CustomUser model.
+- Registered CustomUser in Settings.py and admin.py
+- Tested Admin Panel's user editing and creation.
