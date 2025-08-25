@@ -13,3 +13,13 @@ Week 3:
 - Created a CustomUser model.
 - Registered CustomUser in Settings.py and admin.py
 - Tested Admin Panel's user editing and creation.
+
+Week 4:
+- Revising Admin Panel planning for models to be edited by Admins.
+
+Week 5:
+- Registered all projects app's modelsinto the admin panel.
+- Customized list_display, search_filter, readonly_fields, ordering, ...
+- Merged (feature/apps-setup) branch with (main).
+- Created new (feature/permissions) branch. 
+ 
