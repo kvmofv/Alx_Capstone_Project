@@ -11,6 +11,8 @@ class ProjectAdmin(admin.ModelAdmin):
     list_display = ("name", "type", "created_by", "creation_date", "finish_date", "status")
     list_filter = ("type", "creation_date", "status")
     search_fields = ("name", "type")
+    readonly_fields = ("created_by", "creation_date")
+    ordering = ("-creation_date",)
 
 class SpaceInline(admin.TabularInline):
     model = PlanSpace
@@ -21,11 +23,13 @@ class PlanAdmin(admin.ModelAdmin):
     inlines = [SpaceInline]
     list_display = ("reference_name", "description", "status", "project")
     search_fields = ("reference_name",)
+    ordering = ("reference_name",)
 
 @admin.register(Space)
 class SpaceAdmin(admin.ModelAdmin):
     list_display = ("name", "description", "status")
     search_fields = ("name",)
+    ordering = ("name",)
 
 @admin.register(Equipment)
 class EquipmentAdmin(admin.ModelAdmin):
