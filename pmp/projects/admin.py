@@ -11,8 +11,8 @@ class ProjectAdmin(admin.ModelAdmin):
     list_display = ("name", "type", "created_by", "creation_date", "finish_date", "status")
     list_filter = ("type", "creation_date", "status")
     search_fields = ("name", "type")
-    readonly_fields = ("created_by", "creation_date")
-    ordering = ("-creation_date",)
+    readonly_fields = ("created_by", "creation_date", "finish_date", "assigned_to")
+    ordering = ("-creation_date",) 
 
 class SpaceInline(admin.TabularInline):
     model = PlanSpace
