@@ -41,8 +41,8 @@ class Space(models.Model):
         return self.name
     
 class PlanSpace(models.Model):
-    plan = models.ForeignKey("Plan", on_delete=models.CASCADE, related_name="plan_spaces")
-    space = models.ForeignKey("Space", on_delete=models.CASCADE, related_name="space_plans")
+    plan = models.ForeignKey(Plan, on_delete=models.CASCADE, related_name="plan_spaces")
+    space = models.ForeignKey(Space, on_delete=models.CASCADE, related_name="space_plans")
     count = models.PositiveIntegerField(default=1)
 
     def __str__(self):
