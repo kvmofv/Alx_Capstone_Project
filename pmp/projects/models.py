@@ -21,7 +21,10 @@ class Project(models.Model):
         return self.name
 
 class Plan(models.Model):
-    STATUS_CHOICES = Project.STATUS_CHOICES
+    STATUS_CHOICES = [
+        ("draft", "Draft"),
+        ("submitted", "Submitted"),
+    ]
     reference_name = models.CharField(max_length=50)
     description = models.TextField(max_length=255, blank=True, null=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='draft')
@@ -31,7 +34,10 @@ class Plan(models.Model):
         return self.reference_name
 
 class Space(models.Model):
-    STATUS_CHOICES = Project.STATUS_CHOICES
+    STATUS_CHOICES = [
+        ("draft", "Draft"),
+        ("submitted", "Submitted"),
+    ]
     name = models.CharField(max_length=50)
     description = models.TextField(max_length=255, blank=True, null=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='draft')
