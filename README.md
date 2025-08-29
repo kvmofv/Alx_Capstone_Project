@@ -22,4 +22,5 @@ Week 5:
 - Customized list_display, search_filter, readonly_fields, ordering, ...
 - Merged (feature/apps-setup) branch with (main).
 - Created new (feature/permissions) branch. 
- 
+- Created all API Endpoints Viwes.
+- Added two more serializers for CEO and PM assigning users.
