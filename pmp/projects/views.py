@@ -81,17 +81,18 @@ class ProjectApproveView(generics.UpdateAPIView):
     def update(self, request, *args, **kwargs):
         project = self.get_object()
 
-        if project.status == "approved":
-            return Response({"error": "Project Locked After Approval. "}, status=403)
-        
         if request.user.role != "CEO":
-            return Response({"error": "Access Denied. "}, status=403)
-        
-        project.status = "approved"
+            return Response({"error": "Access Denied."}, status=403)
+
+        new_status = request.data.get("status")
+        if new_status not in ["approved", "reviewed"]:
+            return Response({"error": "Invalid status."}, status=400)
+
+        project.status = new_status
         project.save()
 
         return Response(self.get_serializer(project).data, status=200)
-
+    
 class ProjectReviewView(generics.UpdateAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
@@ -143,18 +144,25 @@ class SpaceSubmitView(generics.UpdateAPIView):
     def get_queryset(self):
         project_id = self.kwargs.get("project_id")
         plan_id = self.kwargs.get("plan_id")
-        return Space.objects.filter(plan_id=plan_id, plan__project_id=project_id)
+        return Space.objects.filter(plans__id=plan_id, plans__project_id=project_id)
 
     def update(self, request, *args, **kwargs):
         space = self.get_object()
-        project = space.plans.project
+
+        project_id = self.kwargs.get("project_id")
+        plan_id = self.kwargs.get("plan_id")
+
+        
+        project = space.plans.filter(id=plan_id, project_id=project_id).first()
+        if not project:
+            return Response({"error": "Invalid project or plan."}, status=404)
 
         if project.status == "approved":
-            return Response({"error": "project Locked After Approval. "}, status=403)
-        
-        if request.user.role != "PLANNER":
-            return Response({"error": "planner's Duty. "}, status=403)
-        
+            return Response({"error": "Project Locked After Approval."}, status=403)
+
+        if request.user.role != "Planner":
+            return Response({"error": "Planner's Duty."}, status=403)
+
         space.status = "submitted"
         space.save()
 
@@ -169,28 +177,39 @@ class SpaceEquipmentUpdateView(generics.UpdateAPIView):
         project_id = self.kwargs.get("project_id")
         plan_id = self.kwargs.get("plan_id")
         space_id = self.kwargs.get("space_id")
+
         return SpaceEquipment.objects.filter(
             space_id=space_id,
-            space__plan_id=plan_id,
-            space__plan__project_id=project_id
+            space__plans__id=plan_id,
+            space__plans__project__id=project_id
         )
 
     def update(self, request, *args, **kwargs):
         spaceequipment = self.get_object()
-        project = spaceequipment.space.plans.project
+
+        project_id = self.kwargs.get("project_id")
+        plan_id = self.kwargs.get("plan_id")
+
+
+        plan = spaceequipment.space.plans.filter(id=plan_id, project_id=project_id).first()
+        if not plan:
+            return Response({"error": "Invalid project/plan combination."}, status=404)
+
+        project = plan.project
 
         if project.status == "approved":
-            return Response({"error": "Project Locked After Approval. "}, status=403)
-        
-        if request.user.role not in ["PM", "TL", "PLANNER"]:
-            return Response({"error": "Access Denied. "}, status=403)
-        
+            return Response({"error": "Project Locked After Approval."}, status=403)
+
+        if request.user.role not in ["PM", "TL", "Planner"]:
+            return Response({"error": "Access Denied."}, status=403)
+
         quantity = int(request.data.get("quantity", 0))
-        spaceequipment.quantity += quantity
+        spaceequipment.quantity = quantity
         spaceequipment.save()
 
         return Response(self.get_serializer(spaceequipment).data, status=200)
-    
+
+        
 class SpaceFurnitureUpdateView(generics.UpdateAPIView):
     queryset = SpaceFurniture.objects.all()
     serializer_class = SpaceFurnitureSerializer
@@ -200,24 +219,34 @@ class SpaceFurnitureUpdateView(generics.UpdateAPIView):
         project_id = self.kwargs.get("project_id")
         plan_id = self.kwargs.get("plan_id")
         space_id = self.kwargs.get("space_id")
+
         return SpaceFurniture.objects.filter(
             space_id=space_id,
-            space__plan_id=plan_id,
-            space__plan__project_id=project_id
+            space__plans__id=plan_id,
+            space__plans__project__id=project_id
         )
 
     def update(self, request, *args, **kwargs):
         spacefurniture = self.get_object()
-        project = spacefurniture.space.plans.project
+
+        project_id = self.kwargs.get("project_id")
+        plan_id = self.kwargs.get("plan_id")
+
+
+        plan = spacefurniture.space.plans.filter(id=plan_id, project_id=project_id).first()
+        if not plan:
+            return Response({"error": "Invalid project/plan combination."}, status=404)
+
+        project = plan.project
 
         if project.status == "approved":
-            return Response({"error": "Project Locked After Approval. "}, status=403)
-        
-        if request.user.role not in ["PM", "TL", "PLANNER"]:
-            return Response({"error": "Access Denied. "}, status=403)
-        
+            return Response({"error": "Project Locked After Approval."}, status=403)
+
+        if request.user.role not in ["PM", "TL", "Planner"]:
+            return Response({"error": "Access Denied."}, status=403)
+
         quantity = int(request.data.get("quantity", 0))
-        spacefurniture.quantity += quantity
+        spacefurniture.quantity = quantity
         spacefurniture.save()
 
         return Response(self.get_serializer(spacefurniture).data, status=200)

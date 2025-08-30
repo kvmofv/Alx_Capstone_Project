@@ -27,7 +27,7 @@ class SpaceEquipmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SpaceEquipment
-        fields = ["space", "equipment", "equipment_id", "quantity"]
+        fields = ["space_id", "space", "equipment", "equipment_id", "quantity"]
 
 class SpaceFurnitureSerializer(serializers.ModelSerializer):
     space_id = serializers.PrimaryKeyRelatedField(queryset=Space.objects.all(), source="space", write_only=True)
