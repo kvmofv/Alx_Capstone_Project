@@ -116,6 +116,10 @@ class PlanSubmitView(generics.UpdateAPIView):
     serializer_class = PlanSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        project_id = self.kwargs.get("project_id")
+        return Plan.objects.filter(project_id=project_id)
+
     def update(self, request, *args, **kwargs):
         plan = self.get_object()
         project = plan.project
@@ -135,6 +139,11 @@ class SpaceSubmitView(generics.UpdateAPIView):
     queryset = Space.objects.all()
     serializer_class = SpaceSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        project_id = self.kwargs.get("project_id")
+        plan_id = self.kwargs.get("plan_id")
+        return Space.objects.filter(plan_id=plan_id, plan__project_id=project_id)
 
     def update(self, request, *args, **kwargs):
         space = self.get_object()
@@ -156,6 +165,16 @@ class SpaceEquipmentUpdateView(generics.UpdateAPIView):
     serializer_class = SpaceEquipmentSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        project_id = self.kwargs.get("project_id")
+        plan_id = self.kwargs.get("plan_id")
+        space_id = self.kwargs.get("space_id")
+        return SpaceEquipment.objects.filter(
+            space_id=space_id,
+            space__plan_id=plan_id,
+            space__plan__project_id=project_id
+        )
+
     def update(self, request, *args, **kwargs):
         spaceequipment = self.get_object()
         project = spaceequipment.space.plans.project
@@ -176,6 +195,16 @@ class SpaceFurnitureUpdateView(generics.UpdateAPIView):
     queryset = SpaceFurniture.objects.all()
     serializer_class = SpaceFurnitureSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        project_id = self.kwargs.get("project_id")
+        plan_id = self.kwargs.get("plan_id")
+        space_id = self.kwargs.get("space_id")
+        return SpaceFurniture.objects.filter(
+            space_id=space_id,
+            space__plan_id=plan_id,
+            space__plan__project_id=project_id
+        )
 
     def update(self, request, *args, **kwargs):
         spacefurniture = self.get_object()
