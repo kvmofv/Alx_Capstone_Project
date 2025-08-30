@@ -57,17 +57,37 @@ class ProjectSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "type", "created_by", "creation_date", "finish_date", "assigned_to", "status", "plans"]
 
 class ProjectCEOAssignmentSerializer(serializers.ModelSerializer):
-    pms = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.filter(role="PM"), many=True)
-    consultants = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.filter(role="Consultant"), many=True)
+    user_ids = serializers.PrimaryKeyRelatedField(
+        queryset=CustomUser.objects.filter(role__in=["PM", "Consultant"]),
+        many=True,
+        write_only=True
+    )
 
     class Meta:
         model = Project
-        fields = ["id", "pms", "consultants"]
+        fields = ["id", "user_ids"]
+
+    def update(self, instance, validated_data):
+        users = validated_data.pop("user_ids", [])
+        instance.assigned_to.set(users) 
+        instance.save()
+        return instance
+
 
 class ProjectPMAssignmentSerializer(serializers.ModelSerializer):
-    tls = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.filter(role="TL"), many=True)
-    planners = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.filter(role="Planner"), many=True)
+    user_ids = serializers.PrimaryKeyRelatedField(
+        queryset=CustomUser.objects.filter(role__in=["Tl", "Planner"]),
+        many=True,
+        write_only=True
+    )
 
     class Meta:
         model = Project
-        fields = ["id", "tls", "planners"]
+        fields = ["id", "user_ids"]
+
+    def update(self, instance, validated_data):
+        users = validated_data.pop("user_ids", [])
+        instance.assigned_to.set(users)
+        instance.save()
+        return instance
+

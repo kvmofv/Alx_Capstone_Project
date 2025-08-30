@@ -5,8 +5,8 @@ urlpatterns = [
 
     path("projects/", views.ProjectListAPIView.as_view(), name="project-list"),
     path("projects/<int:id>/", views.ProjectRetrieveAPIView.as_view(), name="project-detail"),
-    path("projects/<int:id>/assign-ceo/", views.ProjectCEOAssignmentView.as_view(), name="project-assign-ceo"),
-    path("projects/<int:id>/assign-pm/", views.ProjectPMAssignmentView.as_view(), name="project-assign-pm"),
+    path("projects/<int:pk>/assign-ceo/", views.ProjectCEOAssignmentView.as_view(), name="project-assign-ceo"),
+    path("projects/<int:pk>/assign-pm/", views.ProjectPMAssignmentView.as_view(), name="project-assign-pm"),
     path("projects/<int:id>/approve/", views.ProjectApproveView.as_view(), name="project-approve"),
     path("projects/<int:id>/review/", views.ProjectReviewView.as_view(), name="project-review"),
 

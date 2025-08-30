@@ -35,8 +35,7 @@ class LoginSerializer(serializers.Serializer):
             "token": token.key
         }
     
-class UserUpdateSerializer(serializers.Serializer):
-    role = serializers.ChoiceField(choices=CustomUser.ROLES)
-    assigned_projects = serializers.PrimaryKeyRelatedField(many=True, queryset=Project.objects.all())
-
-    
+class UserUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ['role']
