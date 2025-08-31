@@ -122,12 +122,14 @@ ngrok:
 
 Configuring ngrok:
 
-- Install  through website: https://ngrok.com/
+- Install  through website: 
+ #      https://ngrok.com/
+
 - Start the Django server locally:
-        python manage.py runserver 8000
+#       python manage.py runserver 8000
 
 - Open a new terminal and start ngrok:
-        ngrok http 8000
+#       ngrok http 8000
 
 - Copy the Forwarding HTTPS URL provided by ngrok (e.g., https://8cd4163424a5.ngrok-free.app)
 - Use this URL for all API requests instead of http://127.0.0.1:8000.
@@ -138,10 +140,10 @@ Configuring ngrok:
 Endpoints
 
 - Get Project Details
-            GET https://8cd4163424a5.ngrok-free.app/api/projects/1/
+#   GET https://8cd4163424a5.ngrok-free.app/api/projects/1/
 
 - Update Space Furniture
-            PATCH https://8cd4163424a5.ngrok-free.app/api/projects/1/plans/2/spaces/1/furnitures/1/update/
+#  PATCH https://8cd4163424a5.ngrok-free.app/api/projects/1/plans/2/spaces/1/furnitures/1/update/
 
 
 - Request body example (JSON):
@@ -157,11 +159,10 @@ Authentication
 
 - The API uses Token Authentication.
 - Include your token in the Authorization header:
-            Authorization: Token <your-token-here>
+#    Authorization: Token <your-token-here>
 
 - Example header in Postman:
-            Key: Authorization
-            Value: Token 1234567890abcdef1234567890abcdef
+#    Key: Authorization          Value: Token 1234567890abcdef1234567890abcdef
 
 
 
