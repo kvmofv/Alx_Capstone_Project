@@ -105,3 +105,70 @@ PMP - ALX Capstone Project:
     * Comments and Notes features.
     * Exapnding the project to include non-medical spaces.
     * Expanding system's users range to include more positions.
+
+=====================================
+
+Deployment Branch
+
+Live API Endpoints
+
+- The backend API is hosted locally and exposed publicly via ngrok. This allows reviewers to access your Django API even though it runs on your machine.
+
+ngrok:
+
+- ngrok is a tool that creates a secure public URL for your local server.
+- It forwards internet traffic to your local Django server, so reviewers can test endpoints without needing to deploy to a cloud service.
+- Free ngrok URLs are temporary and change every time you restart the tunnel.
+
+Configuring ngrok:
+
+- Install  through website: https://ngrok.com/
+- Start the Django server locally:
+        python manage.py runserver 8000
+
+- Open a new terminal and start ngrok:
+        ngrok http 8000
+
+- Copy the Forwarding HTTPS URL provided by ngrok (e.g., https://8cd4163424a5.ngrok-free.app)
+- Use this URL for all API requests instead of http://127.0.0.1:8000.
+- Keep both Django server and ngrok running while testing. Once stopped, the URL will no longer work.
+
+
+
+Endpoints
+
+- Get Project Details
+            GET https://8cd4163424a5.ngrok-free.app/api/projects/1/
+
+- Update Space Furniture
+            PATCH https://8cd4163424a5.ngrok-free.app/api/projects/1/plans/2/spaces/1/furnitures/1/update/
+
+
+- Request body example (JSON):
+
+            {
+            "space_id": 1,
+            "furniture_id": 1,
+            "quantity": 10
+            }
+
+
+Authentication
+
+- The API uses Token Authentication.
+- Include your token in the Authorization header:
+            Authorization: Token <your-token-here>
+
+- Example header in Postman:
+            Key: Authorization
+            Value: Token 1234567890abcdef1234567890abcdef
+
+
+
+Additional Notes
+
+- Deployment work all in (deployment) branch, so it's not merged into (main) branch for clarity.
+- ngrok URLs are temporary; they change every time the tunnel restarts.
+- CSRF errors may occur if accessing Django admin via ngrok — use your local server instead (http://127.0.0.1:8000/admin/).
+- Users should only test the API endpoints using the ngrok URL + token.
+
